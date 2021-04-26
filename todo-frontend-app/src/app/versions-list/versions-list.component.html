@@ -1,0 +1,11 @@
+<table class="table table-striped">
+    <tbody *ngIf="versions.length > 0">
+        <tr *ngFor="let version of versions" class ="row">
+            <div class = "col-12">
+                <app-versions-list-item class="component-wrapper" [version]="version"
+                    (remove)="onRemoveVersion($event)">
+                </app-versions-list-item>
+            </div>
+        </tr>
+    </tbody>
+</table>

@@ -4,6 +4,7 @@ import {Todo} from '../_models/todo';
 import {Observable, throwError} from 'rxjs';
 import {retry, catchError} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
+import { Version } from '../_models/version';
 
 const API_URL = environment.apiUrl;
 
@@ -17,7 +18,7 @@ headers.append('Access-Control-Allow-Origin', `*`);
 export class ApiService {
 
   // Define API
-  apiURL = 'http://localhost:8080';
+  apiURL = 'http://localhost:9191';
 
   constructor(private http: HttpClient) { }
 
@@ -82,6 +83,54 @@ export class ApiService {
       );
   }
 
+
+  // HttpClient API get() method => Fetch todo list
+  getAllVersions(): Observable<Version[]> {
+    return this.http.get<Version[]>(this.apiURL + '/version')
+      .pipe(
+        retry(1),
+        catchError(this.handleError)
+      );
+  }
+
+// HttpClient API get() method => Fetch todo
+  getVersionById(id): Observable<Version> {
+    return this.http.get<Version>(this.apiURL + '/version/' + id)
+      .pipe(
+        retry(1),
+        catchError(this.handleError)
+      );
+  }
+
+  // HttpClient API post() method => Create todo
+  createVersion(version: Version): Observable<Version> {
+    return this.http.post<Version>(this.apiURL + '/version', JSON.stringify(version), this.httpOptions)
+      .pipe(
+        retry(1),
+        catchError(this.handleError)
+      );
+  }
+
+
+  // HttpClient API put() method => Update todo
+  updateVersion(version): Observable<Version> {
+    return this.http.put<Version>(this.apiURL + '/version/' + version.id, JSON.stringify(version), this.httpOptions)
+      .pipe(
+        retry(1),
+        catchError(this.handleError)
+      );
+  }
+
+
+
+  // HttpClient API delete() method => Delete todo
+  deleteVersionById(id: number) {
+    return this.http.delete<Version>(this.apiURL + '/version/' + id, this.httpOptions)
+      .pipe(
+        retry(1),
+        catchError(this.handleError)
+      );
+  }
 
   // Error handling
   handleError(error) {

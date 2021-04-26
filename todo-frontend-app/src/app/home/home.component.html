@@ -2,9 +2,24 @@
   <div class="container">
 
     <app-todo-list-header (add)="onAddTodo($event)"></app-todo-list-header>
-    <app-todo-list [todos]="todos" (toggleComplete)="onToggleTodoComplete($event)" (remove)="onRemoveTodo($event)"></app-todo-list>
+    <app-todo-list [todos]="todos" (toggleComplete)="onToggleTodoComplete($event)" (remove)="onRemoveTodo($event)">
+    </app-todo-list>
     <app-todo-list-footer [todos]="todos"></app-todo-list-footer>
 
-    <router-outlet></router-outlet>
+
+    <app-versions-list-header (add)="onAddVersion($event)"></app-versions-list-header>
+    <app-versions-list [versions]="versions" (remove)="onRemoveVersion($event)">
+    </app-versions-list>
+    <div class = "row">
+      <mat-tab-group [selectedIndex]="1">
+        <mat-tab [label]="tab.title" *ngFor="let tab of versions;let index = index">
+          <ng-template matTabContent>
+            <div style="margin:8px 16px 16px;" innerHtml="{{tab.description}}">
+            </div>
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
   </div>
 </div>
+<router-outlet></router-outlet>

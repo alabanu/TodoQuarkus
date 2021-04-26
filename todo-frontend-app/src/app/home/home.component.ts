@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {AccountService, TodoDataService} from '../_services';
-import {Todo, User} from '../_models';
+import { AccountService, TodoDataService } from '../_services';
+import { Todo, User } from '../_models';
+// import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
+import { VersionDataService } from '../_services/version-data.service';
+import { Version } from '../_models/version';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -11,21 +14,36 @@ export class HomeComponent implements OnInit {
 
   user: User;
   todos: Todo[] = [];
+  versions: Version[] = [];
+  name = 'Angular';
+  selectedTabIndex: any;
 
-  constructor(private todoDataService: TodoDataService, private accountService: AccountService) {
+  constructor(private todoDataService: TodoDataService,
+    private accountService: AccountService,
+    private versionDataService: VersionDataService) {
     this.accountService.user.subscribe(x => this.user = x);
   }
 
 
   ngOnInit(): void {
-     this.todoDataService
+    this.todoDataService
       .getAllTodos()
       .subscribe(
         (todos) => {
           this.todos = todos;
         }
       );
+
+    this.versionDataService
+      .getAllVersions()
+      .subscribe(
+        (versions) => {
+          this.versions = versions;
+          console.log(this.versions);
+        }
+      );
   }
+
 
   onAddTodo(todo) {
     this.todoDataService
@@ -57,6 +75,25 @@ export class HomeComponent implements OnInit {
       );
   }
 
+  onAddVersion(version) {
+    this.versionDataService
+      .addVersion(version)
+      .subscribe(
+        (newVersion) => {
+          this.versions = this.versions.concat(newVersion);
+        }
+      );
+  }
+
+  onRemoveVersion(version) {
+    this.versionDataService
+      .deleteVersionById(version.id)
+      .subscribe(
+        (_) => {
+          this.versions = this.versions.filter((t) => t.id !== version.id);
+        }
+      );
+  }
 
   logout() {
     this.accountService.logout();

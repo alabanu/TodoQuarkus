@@ -1,0 +1,22 @@
+package io.todo.model;
+
+
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.panache.common.Sort;
+
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import java.util.Date;
+import java.util.List;
+
+@Entity
+public class Version extends PanacheEntity {
+    public String title;
+    public String description;
+    @ManyToOne
+    public User user;
+    public Date dueDate;
+    public static List<User> listAllByUser(User user, Sort sort) {
+        return list("user = ?1 ",sort,user);
+    }
+}

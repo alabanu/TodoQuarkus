@@ -21,6 +21,7 @@ export class TodoListItemComponent implements OnInit {
   toggleComplete: EventEmitter<Todo> = new EventEmitter();
 
   constructor() {
+    console.log(this.todo);
   }
 
   toggleTodoComplete(todo: Todo) {
